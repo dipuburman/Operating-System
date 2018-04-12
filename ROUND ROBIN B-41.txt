@@ -1,0 +1,132 @@
+PROGRAM - ROUND ROBIN
+----------------------
+#include<stdio.h> 
+ 
+int main() 
+{ 
+  printf("ROUND ROBIN K1647 B-41 \n\n");
+  int count,n,time,remain,flag=0,time_quantum; 
+  int wait_time=0,turnaround_time=0,arrival_time[10],burst_time[10],remaining_time[10]; 
+  printf("Enter Total Number of Process:\t "); 
+  scanf("%d",&n); 
+  remain=n; 
+  for(count=0;count<n;count++) 
+  { 
+    printf("Enter Arrival Time and Burst Time(In milliseconds) for The Process %d :",count+1); 
+    scanf("%d",&arrival_time[count]); 
+    scanf("%d",&burst_time[count]); 
+    remaining_time[count]=burst_time[count]; 
+  } 
+  printf("Enter Time Quantum(milliseconds):\t"); 
+  scanf("%d",&time_quantum); 
+  printf("\n\nProcess\t|Turnaround Time|Waiting Time\n\n"); 
+  for(time=0,count=0;remain!=0;) 
+  { 
+    if(remaining_time[count]<=time_quantum && remaining_time[count]>0) 
+    { 
+      time+=remaining_time[count]; 
+      remaining_time[count]=0; 
+      flag=1; 
+    } 
+    else if(remaining_time[count]>0) 
+    { 
+      remaining_time[count]-=time_quantum; 
+      time+=time_quantum; 
+    } 
+    if(remaining_time[count]==0 && flag==1) 
+    { 
+      remain--; 
+      printf("P[%d]\t|\t%d\t|\t%d\n",count+1,time-arrival_time[count],time-arrival_time[count]-burst_time[count]); 
+      wait_time+=time-arrival_time[count]-burst_time[count]; 
+      turnaround_time+=time-arrival_time[count]; 
+      flag=0; 
+    } 
+    if(count==n-1) 
+      count=0; 
+    else if(arrival_time[count+1]<=time) 
+      count++; 
+    else 
+      count=0; 
+  } 
+  printf("\nAverage Waiting Time= %f\n",wait_time*1.0/n); 
+  printf("Avg Turnaround Time = %f",turnaround_time*1.0/n); 
+  
+  return 0; 
+}
+
+
+*********************************************************************************************************
+------------------------------
+TESTCASE 1
+------------------------------
+ROUND ROBIN K1647 B-41
+
+Enter Total Number of Process:   4
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 1 :0 4
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 2 :2 6
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 3 :7 5
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 4 :3 4
+Enter Time Quantum(milliseconds):       2
+
+
+Process |Turnaround Time|Waiting Time
+
+P[1]    |       6       |       2
+P[2]    |       12      |       6
+P[4]    |       15      |       11
+P[3]    |       12      |       7
+
+Average Waiting Time= 6.500000
+Avg Turnaround Time = 11.250000
+
+
+--------------------------------
+TESTCASE 2
+--------------------------------
+ROUND ROBIN K1647 B-41
+
+Enter Total Number of Process:   5
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 1 :4 5
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 2 :2 6
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 3 :0 3
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 4 :7 1
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 5 :5 8
+Enter Time Quantum(milliseconds):       3
+
+
+Process |Turnaround Time|Waiting Time
+
+P[3]    |       9       |       6
+P[4]    |       3       |       2
+P[1]    |       11      |       6
+P[2]    |       16      |       10
+P[5]    |       18      |       10
+
+Average Waiting Time= 6.800000
+Avg Turnaround Time = 11.400000
+--------------------------------
+TESTCASE 3
+--------------------------------
+ROUND ROBIN K1647 B-41
+
+Enter Total Number of Process:   5
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 1 :2 5
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 2 :3 6
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 3 :4 2
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 4 :0 7
+Enter Arrival Time and Burst Time(In milliseconds) for The Process 5 :3 10
+Enter Time Quantum(milliseconds):       4
+
+
+Process |Turnaround Time|Waiting Time
+
+P[3]    |       6       |       4
+P[1]    |       17      |       12
+P[2]    |       18      |       12
+P[4]    |       24      |       17
+P[5]    |       27      |       17
+
+Average Waiting Time= 12.400000
+Avg Turnaround Time = 18.400000
+--------------------------------
+
